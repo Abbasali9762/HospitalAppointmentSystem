@@ -20,53 +20,79 @@ while (true)
         Console.WriteLine("---------------Hospital Admission System------------------\n");
 
         string firstName;
-        while (true)
-        {
-            Console.Write("Enter your name: ");
-            firstName = Console.ReadLine();
-            if (string.IsNullOrWhiteSpace(firstName) || firstName.Any(char.IsDigit))
-            {
-                throw new InvalidNameInputException();
+while (true)
+{
+    try
+    {
+        Console.Write("Enter your name: ");
+        firstName = Console.ReadLine();
+        if (string.IsNullOrWhiteSpace(firstName) || firstName.Any(char.IsDigit))
+            throw new InvalidNameInputException();
+        break;
+    }
+    catch (InvalidNameInputException ex)
+    {
+        Console.WriteLine($"Error: {ex.Message}");
+    }
+}
 
+string lastName;
+while (true)
+{
+    try
+    {
+        Console.Write("Enter your surname: ");
+        lastName = Console.ReadLine();
+        if (string.IsNullOrWhiteSpace(lastName) || lastName.Any(char.IsDigit))
+            throw new InvalidSurnameInputException();
+        break;
+    }
+    catch (InvalidSurnameInputException ex)
+    {
+        Console.WriteLine($"Error: {ex.Message}");
+    }
+}
 
-            }
-            else break;
-        }
+string email;
+while (true)
+{
+    try
+    {
+        Console.Write("Enter your email: ");
+        email = Console.ReadLine();
+        if (string.IsNullOrWhiteSpace(email) || !email.EndsWith("@gmail.com"))
+            throw new InvalidEmailInputException();
+        break;
+    }
+    catch (InvalidEmailInputException ex)
+    {
+        Console.WriteLine($"Error: {ex.Message}");
+    }
+}
 
-        string lastName;
-        while (true)
-        {
-            Console.Write("Enter your surname: ");
-            lastName = Console.ReadLine();
-            if (string.IsNullOrWhiteSpace(lastName) || lastName.Any(char.IsDigit))
-            {
-                throw new InvalidSurnameInputException();
+string phone;
+while (true)
+{
+    try
+    {
+        Console.Write("Enter your phone number: ");
+        phone = Console.ReadLine()?.Replace(" ", "");
 
-            }
-            else break;
-        }
-
-        string email;
-        while (true)
-        {
-            Console.Write("Enter your email: ");
-            email = Console.ReadLine();
-            if (string.IsNullOrWhiteSpace(email) || !email.EndsWith("@gmail.com"))
-            {
-                throw new InvalidEmailInputException();
-
-            }
-            else break;
-        }
-
-        Console.Write("Enter your phone number : ");
-        string phone = Console.ReadLine();
-
-        if (string.IsNullOrWhiteSpace(phone) || !phone.All(char.IsDigit) || phone.Length < 10)
-        {
+        if (string.IsNullOrWhiteSpace(phone) || !phone.All(char.IsDigit) || phone.Length != 10)
             throw new InvalidPhoneNumberException();
-        }
 
+        string[] validPrefixes = { "050", "051", "055", "070", "077", "099" };
+        string prefix = phone.Substring(0, 3);
+
+        if (!validPrefixes.Contains(prefix))
+            throw new Exception("Phone number must start with a valid Azerbaijan operator code (e.g., 050, 055, etc.).");
+        break;
+    }
+    catch (Exception ex)
+    {
+        Console.WriteLine($"Error: {ex.Message}");
+    }
+}
         var patient = new Patient
         {
             Id = Guid.NewGuid().ToString(),
